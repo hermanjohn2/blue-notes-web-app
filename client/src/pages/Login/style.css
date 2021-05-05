@@ -1,0 +1,21 @@
+.login-container {
+	margin: 10%;
+	min-height: 500px;
+}
+
+.login-card {
+	padding: 10% !important;
+	text-align: center;
+	align-content: center;
+}
+
+div.login-content {
+	width: 75%;
+	margin: auto;
+	padding-bottom: 1%;
+}
+
+button.login-content {
+	width: 25% !important;
+	margin: auto !important;
+}

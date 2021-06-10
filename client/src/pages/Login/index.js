@@ -3,13 +3,14 @@ import { Card, Input, Button } from 'semantic-ui-react';
 import './style.css';
 
 import API from '../../utils/API';
+import Store from '../../utils/localStore';
 
-const Login = () => {
+const Login = props => {
 	const [registered, setRegistered] = useState(true);
 	const [loginEmail, setLoginEmail] = useState('');
 	const [loginPassword, setLoginPassword] = useState('');
 	const [registerName, setRegisterName] = useState('');
-	const [registerBusiness, setRegisterBusiness] = useState('');
+	const [company, setCompany] = useState('');
 	const [registerEmail, setRegisterEmail] = useState('');
 	const [registerEmailConfirm, setRegisterEmailConfirm] = useState('');
 	const [registerPassword, setRegisterPassword] = useState('');
@@ -28,15 +29,16 @@ const Login = () => {
 			};
 
 			API.loginUser(bodyObj)
-				.then(() => {
-					window.location.replace('/');
+				.then(res => {
+					props.setUser(res.data._id);
+					Store.post(res.data._id);
 				})
 				.catch(err => console.log(err));
 		},
 		register: () => {
 			if (
 				!registerName ||
-				!registerBusiness ||
+				!company ||
 				!registerPassword ||
 				!registerPasswordConfirm ||
 				!registerEmail ||
@@ -64,12 +66,13 @@ const Login = () => {
 				name: registerName,
 				email: registerEmail,
 				password: registerPassword,
-				businesses: [registerBusiness]
+				company: company
 			};
 
 			API.registerUser(bodyObj)
-				.then(() => {
-					window.location.replace('/');
+				.then(res => {
+					props.setUser(res.data._id);
+					Store.post(res.data._id);
 				})
 				.catch(err => console.log(err));
 		}
@@ -118,8 +121,8 @@ const Login = () => {
 						className="login-content"
 						type="text"
 						placeholder="Business Name"
-						value={registerBusiness}
-						onChange={e => setRegisterBusiness(e.target.value)}
+						value={company}
+						onChange={e => setCompany(e.target.value)}
 					/>
 					<Input
 						className="login-content"

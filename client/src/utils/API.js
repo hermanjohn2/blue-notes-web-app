@@ -6,7 +6,10 @@ const url =
 
 const API = {
 	registerUser: data => axios.post(`${url}/api/users/register`, data),
-	loginUser: data => axios.post(`${url}/api/auth/login`, data)
+	loginUser: data => axios.post(`${url}/api/auth/login`, data),
+	getSession: () => axios.get(`${url}/api/auth/session`),
+	updateSession: data => axios.put(`${url}/api/auth/session`, data),
+	logout: () => axios.post(`${url}/api/auth/logout`)
 };
 
 export default API;

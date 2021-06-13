@@ -1,29 +1,20 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Store from './utils/localStore';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
 
 const App = () => {
-	const [user, setUser] = useState();
+	const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
-	useEffect(() => {
-		const user = Store.get();
-		setUser(user);
-	}, [user]);
-
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 	return (
 		<Router>
 			<Switch>
 				<Route exact path="/">
-					{!user ? (
-						<Login setUser={setUser} />
-					) : (
-						<Dashboard user={user} setUser={setUser} />
-					)}
+					{!isAuthenticated ? loginWithRedirect() : <Dashboard />}
 				</Route>
-				{/* <Route exact path="/login" component={Login} /> */}
 			</Switch>
 		</Router>
 	);

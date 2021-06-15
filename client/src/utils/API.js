@@ -5,6 +5,7 @@ const url =
 		: 'Enter Production API URL here';
 
 const API = {
+	getConfig: name => axios.get(`${url}/api/config/${name}`),
 	getUser: id => axios.get(`${url}/api/users/${id}`),
 	createUser: data => axios.post(`${url}/api/users`, data)
 };

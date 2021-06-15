@@ -9,6 +9,7 @@ const App = () => {
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
+
 	return (
 		<Router>
 			<Switch>

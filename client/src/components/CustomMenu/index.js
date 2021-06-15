@@ -13,7 +13,7 @@ const CustomMenu = () => {
 		console.log(type);
 	};
 	return (
-		<Menu vertical>
+		<Menu fluid vertical>
 			<Popup
 				flowing
 				hoverable

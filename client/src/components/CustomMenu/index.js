@@ -1,100 +1,30 @@
-import {
-	Grid,
-	Input,
-	Label,
-	Menu,
-	Popup,
-	Header,
-	Button
-} from 'semantic-ui-react';
+import { Menu, Dropdown } from 'semantic-ui-react';
 
-const CustomMenu = () => {
-	const menuHandler = type => {
-		console.log(type);
-	};
+const CustomMenu = props => {
+	const menuItems = props.config.menuOptions;
+
 	return (
 		<Menu fluid vertical>
-			<Popup
-				flowing
-				hoverable
-				trigger={
-					<Menu.Item>
-						<Label>+</Label>
-						Create
-					</Menu.Item>
-				}>
-				<Grid centered divided columns={3}>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Job</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Customer</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Company</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-				</Grid>
-			</Popup>
-			<Popup
-				flowing
-				hoverable
-				trigger={
-					<Menu.Item>
-						<Label>-</Label>
-						Edit
-					</Menu.Item>
-				}>
-				<Grid centered divided columns={3}>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Job</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Customer</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Company</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-				</Grid>
-			</Popup>
-			<Popup
-				flowing
-				hoverable
-				trigger={
-					<Menu.Item>
-						<Label>$</Label>
-						Reports
-					</Menu.Item>
-				}>
-				<Grid centered divided columns={3}>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Jobs</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">Sales</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-					<Grid.Column textAlign="center">
-						<Header as="h4">All</Header>
-
-						<Button>+</Button>
-					</Grid.Column>
-				</Grid>
-			</Popup>
+			{menuItems.map(item => (
+				<Dropdown key={`menu-dropdown-${item.type}`} item text={item.title}>
+					<Dropdown.Menu>
+						{item.subOptions.map(subItem => (
+							<Dropdown.Item
+								key={subItem.type}
+								onClick={() =>
+									props.setModal({
+										show: true,
+										title: subItem.title,
+										type: item.type,
+										formData: subItem.formData
+									})
+								}>
+								{subItem.optionText}
+							</Dropdown.Item>
+						))}
+					</Dropdown.Menu>
+				</Dropdown>
+			))}
 		</Menu>
 	);
 };

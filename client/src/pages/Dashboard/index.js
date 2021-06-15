@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Grid } from 'semantic-ui-react';
 import API from '../../utils/API';
+
+import CustomMenu from '../../components/CustomMenu';
 
 const Dashboard = props => {
 	const { user, isLoading, logout } = useAuth0();
@@ -33,11 +36,25 @@ const Dashboard = props => {
 		</div>
 	) : (
 		<div>
-			<button onClick={() => logout({ returnTo: window.location.origin })}>
-				Logout
-			</button>
-
-			{currentUser ? <p>{currentUser.alias}</p> : null}
+			<Grid stackable columns="equal">
+				<Grid.Row stretched>
+					<button onClick={() => logout({ returnTo: window.location.origin })}>
+						Logout
+					</button>
+				</Grid.Row>
+				{currentUser ? (
+					<Grid.Row stretched>
+						<Grid.Column>
+							<CustomMenu />
+						</Grid.Column>
+						<Grid.Column>
+							<div className="dash-stats">
+								<h1>Stats?</h1>
+							</div>
+						</Grid.Column>
+					</Grid.Row>
+				) : null}
+			</Grid>
 		</div>
 	);
 };

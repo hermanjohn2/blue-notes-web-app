@@ -6,8 +6,10 @@ const url =
 
 const API = {
 	getConfig: name => axios.get(`${url}/api/config/${name}`),
-	getUser: id => axios.get(`${url}/api/users/${id}`),
-	createUser: data => axios.post(`${url}/api/users`, data)
+	getUser: id => axios.get(`${url}/api/users/${id}/all-data`),
+	createUser: data => axios.post(`${url}/api/users`, data),
+	createCustomer: data => axios.post(`${url}/api/customers`, data),
+	createJob: data => axios.post(`${url}/api/jobs`, data)
 };
 
 export default API;

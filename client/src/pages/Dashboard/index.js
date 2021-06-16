@@ -51,7 +51,12 @@ const Dashboard = props => {
 		<>
 			{config.name === 'default' ? (
 				<>
-					<CrudModal modal={modal} setModal={setModal} />
+					<CrudModal
+						user={currentUser}
+						setUser={setCurrentUser}
+						modal={modal}
+						setModal={setModal}
+					/>
 					<Grid className="desktop-container" stackable columns={2}>
 						<Grid.Row>
 							<button

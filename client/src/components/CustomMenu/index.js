@@ -15,7 +15,8 @@ const CustomMenu = props => {
 									props.setModal({
 										show: true,
 										title: subItem.title,
-										type: item.type,
+										method: item.type,
+										type: item.type === 'create' ? 'form' : 'cards',
 										formData: subItem.formData
 									})
 								}>

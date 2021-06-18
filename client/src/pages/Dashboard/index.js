@@ -18,6 +18,7 @@ const Dashboard = props => {
 	});
 
 	const handleUser = () => {
+		// console.log(currentUser);
 		if (!currentUser) {
 			API.getUser(user.sub)
 				.then(res => setCurrentUser(res.data))

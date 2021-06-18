@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { Button, Header, Icon, Modal, Form } from 'semantic-ui-react';
-import CustomMessage from '../CustomMessage';
+import { Button, Header, Icon, Modal } from 'semantic-ui-react';
+
 import API from '../../utils/API';
+
+import ModalForm from '../ModalForm';
+import ModalCards from '../ModalCards';
+import CustomMessage from '../CustomMessage';
 
 const CrudModal = props => {
 	const [formObj, setFormObj] = useState();
@@ -10,14 +14,13 @@ const CrudModal = props => {
 		type: '',
 		text: ''
 	});
-
 	const modal = props.modal ? props.modal : null;
-	const method = modal.title
+	const action = modal.title
 		? modal.title.replace(' ', '-').toLowerCase()
 		: null;
-	const userId = props.user._id;
 	const customers = props.user.customers;
-	const customerSelectionArr = customers[0]
+	const jobs = props.user.jobs;
+	const customerSelectionArr = customers
 		? customers.map(customer => {
 				return {
 					key: customer._id,
@@ -37,13 +40,13 @@ const CrudModal = props => {
 
 	const modalHandler = {
 		close: () => {
-			const newModal = { ...modal };
-			newModal.show = false;
-			props.setModal(newModal);
-
 			const messageObj = { ...messageData };
 			messageObj.show = false;
 			setMessageData(messageObj);
+
+			const newModal = { ...modal };
+			newModal.show = false;
+			props.setModal(newModal);
 
 			setFormObj();
 		},
@@ -61,60 +64,26 @@ const CrudModal = props => {
 		form: async () => {
 			const user = { ...props.user };
 			const formObject = { ...formObj };
+			let updatedUser;
+			let message;
 
 			try {
-				if (method) {
-					switch (method) {
+				if (action && user) {
+					switch (action) {
 						case 'create-customer':
-							if (formObj && formObj.name) {
-								formObject.user = userId;
-
-								const newCustomer = await API.createCustomer(formObject);
-
-								user.customers.push(newCustomer.data);
-
-								props.setUser(user);
-
-								modalHandler.message('success', 'New Customer Created!');
-							} else {
-								throw new Error('No Data');
-							}
+							if (formObject && formObject.name) {
+								updatedUser = await API.createUserCustomer(formObject, user);
+								message = 'Success! New customer created.';
+							} else throw new Error('No Data');
 							break;
+
 						case 'create-job':
-							if (formObj && formObj.title && formObj.customer !== 0) {
-								formObject.user = userId;
-
-								const newJob = await API.createJob(formObject);
-
-								user.jobs.push(newJob.data);
-
-								props.setUser(user);
-
-								modalHandler.message('success', 'New Job Created!');
-							} else if (formObj && formObj.title && formObj.customer === 0) {
-								const custObj = {
-									user: userId,
-									name: `Customer for ${formObj.title}`
-								};
-
-								const newCustomer = await API.createCustomer(custObj);
-
-								user.customers.push(newCustomer.data);
-
-								formObject.user = userId;
-
-								formObject.customer = newCustomer.data._id;
-
-								const newJob = await API.createJob(formObject);
-
-								user.jobs.push(newJob.data);
-
-								modalHandler.message('success', 'New Customer & Job Created!');
-							} else {
-								throw new Error('No Data');
-							}
-
+							if (formObject && formObject.title) {
+								updatedUser = await API.createUserJob(formObject, user);
+								message = 'Success! New job created.';
+							} else throw new Error('No Data');
 							break;
+
 						case 'create-company':
 							modalHandler.message(
 								'error',
@@ -122,9 +91,19 @@ const CrudModal = props => {
 							);
 
 							break;
+						case 'edit-job':
+							if (formObject && formObject.title && formObject.customer) {
+								updatedUser = await API.editUserJob(formObject, user);
+								message = 'Success! Job updated.';
+							} else throw new Error('No Data');
+							break;
+
 						default:
 							break;
 					}
+
+					props.setUser(updatedUser);
+					modalHandler.message('success', message);
 				} else throw new Error('Reset');
 			} catch (err) {
 				if (err.message === 'No Data') {
@@ -134,6 +113,7 @@ const CrudModal = props => {
 						'error',
 						'Something went wrong. Please try again.'
 					);
+					console.log(err);
 				}
 			}
 		},
@@ -151,65 +131,45 @@ const CrudModal = props => {
 				<Modal closeIcon open={modal.show} onClose={() => modalHandler.close()}>
 					<Header
 						icon={
-							modal.type === 'create'
+							modal.method === 'create'
 								? 'plus'
-								: modal.type === 'edit'
+								: modal.method === 'edit'
 								? 'undo'
-								: modal.type === 'read'
+								: modal.method === 'read'
 								? 'dollar sign'
 								: 'archive'
 						}
 						content={modal.title}
 					/>
 					<Modal.Content>
-						{modal.type === 'create' ? (
-							<Form onSubmit={e => modalHandler.form(e)}>
-								{modal.formData.map(item => (
-									<Form.Field key={item.name.replace(' ', '-').toLowerCase()}>
-										{item.type === 'input' ? (
-											<Form.Input
-												onChange={e =>
-													modalHandler.formObj(item, e.target.value)
-												}
-												fluid
-												label={item.name}
-												placeholder={item.name}
-											/>
-										) : item.type === 'selection' ? (
-											<Form.Select
-												onChange={(e, data) =>
-													modalHandler.formObj(item, data.value)
-												}
-												options={customerSelectionArr}
-												fluid
-												label={item.name}
-												placeholder={item.name}
-											/>
-										) : item.type === 'text-box' ? (
-											<Form.TextArea
-												onChange={e =>
-													modalHandler.formObj(item, e.target.value)
-												}
-												label={item.name}
-												placeholder={item.name}
-											/>
-										) : null}
-									</Form.Field>
-								))}
-							</Form>
+						{modal.type === 'form' ? (
+							<ModalForm
+								modal={modal}
+								modalHandler={modalHandler}
+								selectionArr={customerSelectionArr}
+								formObj={formObj}
+							/>
+						) : modal.type === 'cards' ? (
+							<ModalCards
+								customers={customers}
+								jobs={jobs}
+								action={action}
+								modal={props.modal}
+								setModal={props.setModal}
+								formObj={formObj}
+								setFormObj={setFormObj}
+							/>
 						) : null}
-
-						<CustomMessage data={messageData} />
+						{messageData.show ? <CustomMessage data={messageData} /> : null}
 					</Modal.Content>
-					<Modal.Actions>
-						<Button
-							onClick={() =>
-								modal.type === 'create' ? modalHandler.form() : null
-							}
-							color="blue">
-							<Icon name="checkmark" /> Submit
-						</Button>
-					</Modal.Actions>
+
+					{modal.type === 'form' ? (
+						<Modal.Actions>
+							<Button onClick={() => modalHandler.form()} color="blue">
+								<Icon name="checkmark" /> Submit
+							</Button>
+						</Modal.Actions>
+					) : null}
 				</Modal>
 			) : null}
 		</>

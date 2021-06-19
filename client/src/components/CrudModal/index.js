@@ -8,6 +8,7 @@ import ModalCards from '../ModalCards';
 import CustomMessage from '../CustomMessage';
 
 const CrudModal = props => {
+	console.log(props.user);
 	const [formObj, setFormObj] = useState();
 	const [messageData, setMessageData] = useState({
 		show: false,
@@ -89,8 +90,8 @@ const CrudModal = props => {
 								'error',
 								'This feature is currently unavailable. Please try again later.'
 							);
-
 							break;
+
 						case 'edit-job':
 							if (formObject && formObject.title && formObject.customer) {
 								updatedUser = await API.editUserJob(formObject, user);
@@ -98,12 +99,21 @@ const CrudModal = props => {
 							} else throw new Error('No Data');
 							break;
 
+						case 'edit-customer':
+							if (formObject && formObject.name) {
+								updatedUser = await API.editUserCustomer(formObject, user);
+								message = 'Success! Customer updated.';
+							}
+							break;
+
 						default:
 							break;
 					}
 
-					props.setUser(updatedUser);
-					modalHandler.message('success', message);
+					if (updatedUser) {
+						props.setUser(updatedUser);
+						modalHandler.message('success', message);
+					} else modalHandler.message('warning', 'No changes made.');
 				} else throw new Error('Reset');
 			} catch (err) {
 				if (err.message === 'No Data') {

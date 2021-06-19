@@ -4,12 +4,23 @@ const url =
 		? 'http://localhost:8080'
 		: 'Enter Production API URL here';
 
+const updateObjInArr = async (arr, obj, newObj) => {
+	const updatedArr = arr.map(item => {
+		if (item._id === obj.data._id) {
+			for (const prop in newObj) {
+				obj.data[prop] = newObj[prop];
+			}
+			return obj.data;
+		} else return item;
+	});
+	return updatedArr;
+};
+
 const API = {
 	getConfig: name => axios.get(`${url}/api/config/${name}`),
 	getUser: id => axios.get(`${url}/api/users/${id}/all-data`),
 	createUser: data => axios.post(`${url}/api/users`, data),
 	createUserCustomer: async (formObj, user) => {
-		console.log(user);
 		formObj.user = user._id;
 		const newCustomer = await axios.post(`${url}/api/customers`, formObj);
 		user.customers.push(newCustomer.data);
@@ -32,7 +43,20 @@ const API = {
 		user.jobs.push(newJob.data);
 		return user;
 	},
-	editCustomer: (id, data) => axios.put(`${url}/api/customers/${id}`, data),
+	editUserCustomer: async (formObj, user) => {
+		formObj.user = user._id;
+		const customerUpdate = await axios.put(
+			`${url}/api/customers/${formObj._id}`,
+			formObj
+		);
+
+		user.customers = await updateObjInArr(
+			user.customers,
+			customerUpdate,
+			formObj
+		);
+		return user;
+	},
 	editUserJob: async (formObj, user) => {
 		if (formObj.customer === 0) {
 			const custObj = {
@@ -48,14 +72,8 @@ const API = {
 			`${url}/api/jobs/${formObj._id}`,
 			formObj
 		);
-		user.jobs = user.jobs.map(job => {
-			if (job._id === jobUpdate.data._id) {
-				for (const prop in formObj) {
-					jobUpdate.data[prop] = formObj[prop];
-				}
-				return jobUpdate.data;
-			} else return job;
-		});
+
+		user.jobs = await updateObjInArr(user.jobs, jobUpdate, formObj);
 		return user;
 	}
 };

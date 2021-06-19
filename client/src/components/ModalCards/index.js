@@ -1,21 +1,22 @@
 import { Button, Card, List } from 'semantic-ui-react';
+import StatsTable from '../StatsTable';
 
 const ModalCards = props => {
 	const cardsArr =
-		props.action === 'edit-customer'
+		props.action === 'edit-customer' || props.action === 'customer-report'
 			? props.customers
 			: props.action === 'edit-job'
 			? props.jobs
 			: [];
 	const header =
-		props.action === 'edit-customer'
+		props.action === 'edit-customer' || props.action === 'customer-report'
 			? 'name'
 			: props.action === 'edit-job'
 			? 'title'
 			: 'N/A';
 
 	const listArr =
-		props.action === 'edit-customer'
+		props.action === 'edit-customer' || props.action === 'customer-report'
 			? [
 					{ key: 'address', text: 'Address' },
 					{ key: 'phone', text: 'Phone' }
@@ -67,6 +68,24 @@ const ModalCards = props => {
 		}
 	};
 
+	const arrayStats = (type, arr, customerId) => {
+		switch (type) {
+			case 'total':
+				return arr.filter(item => item.customer === customerId).length;
+
+			case 'complete':
+				return arr.filter(item => item.customer === customerId && item.complete)
+					.length;
+			case 'incomplete':
+				return arr.filter(
+					item => item.customer === customerId && !item.complete
+				).length;
+
+			default:
+				return [];
+		}
+	};
+
 	return cardsArr[0] ? (
 		<Card.Group>
 			{cardsArr.map(item => (
@@ -89,17 +108,37 @@ const ModalCards = props => {
 									  )
 									: null}
 							</List>
+							{props.action === 'customer-report' ? (
+								<StatsTable
+									data={{
+										headers: ['Total Jobs', 'Paid', 'No Payment'],
+										values: [
+											[
+												arrayStats('total', props.jobs, item._id),
+												arrayStats('complete', props.jobs, item._id),
+												arrayStats('incomplete', props.jobs, item._id)
+											]
+										]
+									}}
+								/>
+							) : null}
 						</Card.Description>
 					</Card.Content>
 					<Card.Content extra>
-						<div className="ui two buttons">
-							<Button color="blue" onClick={() => cardHandler('edit', item)}>
-								Edit
+						{props.action === 'edit-customer' || props.action === 'edit-job' ? (
+							<div className="ui two buttons">
+								<Button color="blue" onClick={() => cardHandler('edit', item)}>
+									Edit
+								</Button>
+								<Button color="red" onClick={() => cardHandler('delete', item)}>
+									Delete
+								</Button>
+							</div>
+						) : props.action === 'customer-report' ? (
+							<Button fluid color="blue">
+								View Report
 							</Button>
-							<Button color="red" onClick={() => cardHandler('delete', item)}>
-								Delete
-							</Button>
-						</div>
+						) : null}
 					</Card.Content>
 				</Card>
 			))}

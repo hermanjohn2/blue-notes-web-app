@@ -24,6 +24,15 @@ const ModalForm = props => {
 							label={item.name}
 							placeholder={item.name}
 						/>
+					) : item.type === 'radio' ? (
+						<Form.Radio
+							label={item.name}
+							slider
+							onChange={(e, data) =>
+								props.modalHandler.formObj(item, data.checked)
+							}
+							checked={props.formObj ? props.formObj[item.key] : false}
+						/>
 					) : item.type === 'text-box' ? (
 						<Form.TextArea
 							onChange={e => props.modalHandler.formObj(item, e.target.value)}

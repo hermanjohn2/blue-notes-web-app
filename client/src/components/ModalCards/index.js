@@ -43,6 +43,7 @@ const ModalCards = props => {
 					formObj.title = data.title;
 					formObj.invoiceTotal = data.invoiceTotal;
 					formObj.customer = data.customer;
+					formObj.complete = data.complete;
 					formObj.notes = data.notes;
 					break;
 				case 'edit-customer':

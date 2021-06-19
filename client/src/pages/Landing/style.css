@@ -7,6 +7,7 @@
 	padding: 10% !important;
 	text-align: center;
 	align-content: center;
+	background-color: #f0f0f0 !important;
 }
 
 div.login-content {
@@ -15,7 +16,19 @@ div.login-content {
 	padding-bottom: 1%;
 }
 
+h1.login-content {
+	font-size: 100px;
+	font-family: monospace;
+}
+
 button.login-content {
+	background-color: #363663 !important;
+	color: #cccccc !important;
 	width: 25% !important;
 	margin: auto !important;
+}
+
+button.login-content:hover {
+	background-color: #cccccc !important;
+	color: #363663 !important;
 }

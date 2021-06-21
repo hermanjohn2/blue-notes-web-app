@@ -34,7 +34,7 @@ const ModalCards = props => {
 		props.customers.filter(customer => customer._id === id)[0].name;
 
 	const cardHandler = (type, data) => {
-		if (type === 'edit') {
+		if (type === 'edit' || type === 'read') {
 			const modal = { ...props.modal };
 			const formObj = {};
 
@@ -52,6 +52,13 @@ const ModalCards = props => {
 					formObj.name = data.name;
 					formObj.phone = data.phone;
 					formObj.address = data.address;
+					break;
+
+				case 'customer-report':
+					modal.type = 'report';
+					modal.reportData = data;
+					modal.reportType = 'customer';
+					props.setModal(modal);
 					break;
 
 				default:
@@ -135,7 +142,10 @@ const ModalCards = props => {
 								</Button>
 							</div>
 						) : props.action === 'customer-report' ? (
-							<Button fluid color="blue">
+							<Button
+								fluid
+								color="blue"
+								onClick={() => cardHandler('read', item)}>
 								View Report
 							</Button>
 						) : null}

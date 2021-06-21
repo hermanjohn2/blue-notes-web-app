@@ -6,7 +6,7 @@ import './style.css';
 
 import CustomMenu from '../../components/CustomMenu';
 import CrudModal from '../../components/CrudModal';
-import StatsBox from '../../components/StatsBox';
+import StatsBox from '../../components/StatsCard';
 
 const Dashboard = props => {
 	const { user, logout } = useAuth0();
@@ -70,7 +70,7 @@ const Dashboard = props => {
 								<CustomMenu config={config} modal={modal} setModal={setModal} />
 							</Grid.Column>
 							<Grid.Column width={8}>
-								<StatsBox />
+								<StatsBox type="all" user={currentUser} />
 							</Grid.Column>
 						</Grid.Row>
 					</Grid>

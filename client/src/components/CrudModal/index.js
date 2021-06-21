@@ -6,6 +6,7 @@ import API from '../../utils/API';
 import ModalForm from '../ModalForm';
 import ModalCards from '../ModalCards';
 import CustomMessage from '../CustomMessage';
+import StatsCard from '../StatsCard';
 
 const CrudModal = props => {
 	console.log(props.user);
@@ -168,6 +169,12 @@ const CrudModal = props => {
 								setModal={props.setModal}
 								formObj={formObj}
 								setFormObj={setFormObj}
+							/>
+						) : modal.type === 'report' ? (
+							<StatsCard
+								type={props.modal.reportType}
+								data={modal.reportData}
+								user={props.user}
 							/>
 						) : null}
 						{messageData.show ? <CustomMessage data={messageData} /> : null}

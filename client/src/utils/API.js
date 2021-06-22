@@ -23,7 +23,7 @@ const API = {
 	createUserCustomer: async (formObj, user) => {
 		formObj.user = user._id;
 		const newCustomer = await axios.post(`${url}/api/customers`, formObj);
-		user.customers.push(newCustomer.data);
+		user.customers.unshift(newCustomer.data);
 		return user;
 	},
 	createUserJob: async (formObj, user) => {
@@ -34,13 +34,13 @@ const API = {
 			};
 
 			const newCustomer = await axios.post(`${url}/api/customers`, customerObj);
-			user.customers.push(newCustomer.data);
+			user.customers.unshift(newCustomer.data);
 			formObj.customer = newCustomer.data._id;
 		}
 
 		formObj.user = user._id;
 		const newJob = await axios.post(`${url}/api/jobs`, formObj);
-		user.jobs.push(newJob.data);
+		user.jobs.unshift(newJob.data);
 		return user;
 	},
 	editUserCustomer: async (formObj, user) => {
@@ -64,7 +64,7 @@ const API = {
 				name: `Customer for ${formObj.title}`
 			};
 			const newCustomer = await API.createCustomer(custObj);
-			user.customers.push(newCustomer.data);
+			user.customers.unshift(newCustomer.data);
 			formObj.customer = newCustomer.data._id;
 		}
 

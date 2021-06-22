@@ -46,6 +46,7 @@ const ModalCards = props => {
 					formObj.customer = data.customer;
 					formObj.complete = data.complete;
 					formObj.notes = data.notes;
+					formObj.datePaid = data.datePaid;
 					break;
 				case 'edit-customer':
 					formObj._id = data._id;

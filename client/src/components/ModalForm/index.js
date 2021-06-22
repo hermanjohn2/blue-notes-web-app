@@ -1,4 +1,5 @@
 import { Form } from 'semantic-ui-react';
+import moment from 'moment';
 
 const ModalForm = props => {
 	return (
@@ -8,10 +9,31 @@ const ModalForm = props => {
 					{item.type === 'input' ? (
 						<Form.Input
 							onChange={e => props.modalHandler.formObj(item, e.target.value)}
-							value={props.formObj ? props.formObj[item.key] : ''}
+							value={
+								props.formObj && item.key !== 'datePaid'
+									? props.formObj[item.key]
+									: props.formObj &&
+									  item.key === 'datePaid' &&
+									  props.formObj[item.key]
+									? moment(props.formObj[item.key]).format('YYYY-MM-DD')
+									: ''
+							}
 							fluid
 							label={item.name}
-							placeholder={item.name}
+							placeholder={
+								item.key === 'phone'
+									? 'XXX-XXX-XXXX'
+									: item.key === 'address'
+									? '111 Street Blvd, City'
+									: item.name
+							}
+							type={
+								item.key === 'datePaid'
+									? 'date'
+									: item.key === 'phone'
+									? 'tel'
+									: 'text'
+							}
 						/>
 					) : item.type === 'selection' ? (
 						<Form.Select

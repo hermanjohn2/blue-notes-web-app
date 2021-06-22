@@ -31,30 +31,6 @@ const StatsCard = props => {
 					</Grid.Column>
 				</Grid.Row>
 			</Grid>
-			{data[1] ? (
-				<div>
-					<h1 className="center aligned">All Jobs</h1>
-					{data.map(job => (
-						<Message
-							className="center aligned"
-							color={job.complete ? 'green' : 'red'}>
-							{job.title} | Paid:{' '}
-							{job.complete ? (
-								<Icon name="thumbs up" />
-							) : (
-								<Icon name="thumbs down" />
-							)}{' '}
-							|{' '}
-							{job.invoiceTotal && job.complete
-								? `Paid: ${job.invoiceTotal}`
-								: job.invoiceTotal && !job.complete
-								? `Owed: ${job.invoiceTotal}`
-								: null}{' '}
-							{job.notes ? `| Notes: ${job.notes}` : null}
-						</Message>
-					))}
-				</div>
-			) : null}
 		</Card>
 	) : null;
 };

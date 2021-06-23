@@ -24,14 +24,13 @@ const ModalCards = props => {
 			: props.action === 'edit-job'
 			? [
 					{ key: 'customer', text: 'Customer' },
-					{ key: 'notes', text: 'Notes' },
+
 					{ key: 'invoiceTotal', text: 'Invoice Total' },
-					{ key: 'complete', text: 'Status' }
+					{ key: 'complete', text: 'Status' },
+					{ key: 'datePaid', text: 'Date Paid' },
+					{ key: 'notes', text: 'Notes' }
 			  ]
 			: [];
-
-	const customerName = id =>
-		props.customers.filter(customer => customer._id === id)[0].name;
 
 	const cardHandler = (type, data) => {
 		if (type === 'edit' || type === 'read') {
@@ -80,7 +79,6 @@ const ModalCards = props => {
 		switch (type) {
 			case 'total':
 				return arr.filter(item => item.customer === customerId).length;
-
 			case 'complete':
 				return arr.filter(item => item.customer === customerId && item.complete)
 					.length;
@@ -105,11 +103,18 @@ const ModalCards = props => {
 							<List divided relaxed>
 								{listArr[0]
 									? listArr.map(listItem =>
-											item[listItem.key] ? (
+											item[listItem.key] || listItem.key === 'complete' ? (
 												<List.Item key={listItem.key}>
 													{listItem.text}:{' '}
 													{listItem.text === 'Customer'
-														? customerName(item[listItem.key])
+														? props.customerName(
+																item[listItem.key],
+																props.customers
+														  )
+														: listItem.key === 'complete'
+														? item[listItem.key]
+															? 'Complete'
+															: 'Incomplete'
 														: item[listItem.key]}
 												</List.Item>
 											) : null

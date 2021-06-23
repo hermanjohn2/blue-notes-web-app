@@ -9,7 +9,6 @@ import CustomMessage from '../CustomMessage';
 import StatsCard from '../StatsCard';
 
 const CrudModal = props => {
-	// console.log(props.user);
 	const formObj = props.formObj;
 	const setFormObj = props.setFormObj;
 	const [messageData, setMessageData] = useState({
@@ -62,7 +61,7 @@ const CrudModal = props => {
 			setMessageData(obj);
 
 			if (type === 'success' || type === 'error')
-				setTimeout(() => modalHandler.close(), 2000);
+				setTimeout(() => modalHandler.close(), 1500);
 		},
 		form: async () => {
 			const user = { ...props.user };
@@ -164,6 +163,7 @@ const CrudModal = props => {
 						) : modal.type === 'cards' ? (
 							<ModalCards
 								customers={customers}
+								customerName={props.customerName}
 								jobs={jobs}
 								action={action}
 								modal={props.modal}
@@ -173,6 +173,7 @@ const CrudModal = props => {
 							/>
 						) : modal.type === 'report' ? (
 							<StatsCard
+								config={props.config}
 								type={props.modal.reportType}
 								data={modal.reportData}
 								user={props.user}
@@ -180,7 +181,7 @@ const CrudModal = props => {
 								setModal={props.setModal}
 								formObj={props.formObj}
 								setFormObj={props.setFormObj}
-								config={props.config}
+								customerName={props.customerName}
 							/>
 						) : null}
 						{messageData.show ? <CustomMessage data={messageData} /> : null}

@@ -45,21 +45,27 @@ const Dashboard = props => {
 		}
 	};
 
-	useEffect(() => handleUser());
-	useEffect(() => getConfig());
+	const customerName = (id, customerArr) =>
+		customerArr.filter(customer => customer._id === id)[0].name;
+
+	useEffect(() => {
+		handleUser();
+		getConfig();
+	});
 
 	return config && currentUser ? (
 		<>
 			{config.name === 'default' ? (
 				<>
 					<CrudModal
+						config={config}
 						user={currentUser}
 						setUser={setCurrentUser}
 						modal={modal}
 						setModal={setModal}
 						formObj={formObj}
 						setFormObj={setFormObj}
-						config={config}
+						customerName={customerName}
 					/>
 					<Grid className="desktop-container" stackable columns={2}>
 						<Grid.Row>
@@ -74,13 +80,14 @@ const Dashboard = props => {
 							</Grid.Column>
 							<Grid.Column width={8}>
 								<StatsCard
+									config={config}
 									type="all"
 									user={currentUser}
 									modal={modal}
 									setModal={setModal}
 									formObj={formObj}
 									setFormObj={setFormObj}
-									config={config}
+									customerName={customerName}
 								/>
 							</Grid.Column>
 						</Grid.Row>

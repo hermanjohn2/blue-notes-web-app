@@ -5,7 +5,8 @@ const ModalForm = props => {
 	return (
 		<Form>
 			{props.modal.formData.map(item => (
-				<Form.Field key={item.name.replace(' ', '-').toLowerCase()}>
+				<Form.Field
+					key={`form-field-${item.name.replace(' ', '-').toLowerCase()}`}>
 					{item.type === 'input' ? (
 						<Form.Input
 							onChange={e => props.modalHandler.formObj(item, e.target.value)}

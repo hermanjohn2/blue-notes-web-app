@@ -12,6 +12,7 @@ import moment from 'moment';
 import './style.css';
 
 const StatsBarChart = props => {
+	console.log(props);
 	const data = props.data
 		.filter(item => item.datePaid)
 		.sort((a, b) => {
@@ -65,7 +66,23 @@ const StatsBarChart = props => {
 			<XAxis dataKey="datePaid" />
 			<YAxis />
 			<Tooltip content={<CustomTooltip />} />
-			<Bar dataKey="invoiceTotal" label="invoiceTotal" fill="#8884d8" />
+			<Bar
+				className="chart-bar"
+				onClick={data =>
+					props.setSelectedJob({
+						_id: data._id,
+						title: data.title,
+						customer: data.customer,
+						complete: data.complete,
+						datePaid: data.datePaid,
+						notes: data.notes,
+						invoiceTotal: data.invoiceTotal
+					})
+				}
+				dataKey="invoiceTotal"
+				label="invoiceTotal"
+				fill="#8884d8"
+			/>
 		</BarChart>
 	) : null;
 };

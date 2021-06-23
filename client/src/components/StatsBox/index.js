@@ -3,6 +3,7 @@ import moment from 'moment';
 import './style.css';
 
 const StatsBox = props => {
+	console.log(props);
 	const editJobConfig = props.config.menuOptions.filter(
 		option => option.type === 'edit'
 	)[0];
@@ -10,7 +11,7 @@ const StatsBox = props => {
 		option => option.type === 'edit-job'
 	)[0];
 
-	const lastJob = props.data[0];
+	const lastJob = props.selectedJob;
 
 	// const paidValsArr = props.data
 	// 	.filter(job => job.complete)
@@ -68,16 +69,20 @@ const StatsBox = props => {
 
 	return (
 		<>
-			<List className="stats-box-list" divided relaxed>
+			<List
+				key={`stats-box-list-${lastJob._id}`}
+				className="stats-box-list"
+				divided
+				relaxed>
 				{listData.map(row =>
 					row.key === 'complete' || lastJob[row.key] ? (
-						<List.Item>
+						<List.Item key={`list-item-${row.key}`}>
 							<List.Content>
-								<List.Header as="h3">{row.text}</List.Header>
+								<List.Header as={row.key === 'title' ? 'h2' : 'h3'}>
+									{row.key === 'title' ? lastJob[row.key] : row.text}
+								</List.Header>
 								<List.Content>
-									{row.key === 'title' ||
-									row.key === 'invoiceTotal' ||
-									row.key === 'notes' ? (
+									{row.key === 'invoiceTotal' || row.key === 'notes' ? (
 										lastJob[row.key]
 									) : row.key === 'complete' && lastJob.complete ? (
 										<Icon size="large" name="thumbs up" />
@@ -85,6 +90,8 @@ const StatsBox = props => {
 										<Icon size="large" name="thumbs down" />
 									) : row.key === 'datePaid' ? (
 										moment(lastJob.datePaid).format('MM-DD-YYYY')
+									) : row.key === 'title' ? (
+										props.customerName(lastJob.customer, props.customers)
 									) : null}
 								</List.Content>
 							</List.Content>

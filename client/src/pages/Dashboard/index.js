@@ -17,6 +17,7 @@ const Dashboard = props => {
 		data: {}
 	});
 	const [formObj, setFormObj] = useState();
+	const [selectedJob, setSelectedJob] = useState();
 
 	const handleUser = () => {
 		if (!currentUser) {
@@ -66,6 +67,8 @@ const Dashboard = props => {
 						formObj={formObj}
 						setFormObj={setFormObj}
 						customerName={customerName}
+						selectedJob={selectedJob}
+						setSelectedJob={setSelectedJob}
 					/>
 					<Grid className="desktop-container" stackable columns={2}>
 						<Grid.Row>
@@ -88,6 +91,8 @@ const Dashboard = props => {
 									formObj={formObj}
 									setFormObj={setFormObj}
 									customerName={customerName}
+									selectedJob={selectedJob}
+									setSelectedJob={setSelectedJob}
 								/>
 							</Grid.Column>
 						</Grid.Row>

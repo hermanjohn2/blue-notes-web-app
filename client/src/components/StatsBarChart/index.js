@@ -1,42 +1,35 @@
 import { Card } from 'semantic-ui-react';
-import {
-	BarChart,
-	CartesianGrid,
-	XAxis,
-	YAxis,
-	Tooltip,
-	Legend,
-	Bar
-} from 'recharts';
+import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from 'recharts';
 import moment from 'moment';
 import './style.css';
 
 const StatsBarChart = props => {
-	console.log(props);
 	const data = props.data
-		.filter(item => item.datePaid)
-		.sort((a, b) => {
-			const dateA = moment(a.datePaid).format('YYYY-MM-DD').split('-');
-			const dateB = moment(b.datePaid).format('YYYY-MM-DD').split('-');
-			if (dateA[0] > dateB[0]) return -1;
-			else if (dateA[0] < dateB[0]) return 1;
-			else if (dateA[1] > dateB[1]) return -1;
-			else if (dateA[1] < dateB[1]) return 1;
-			else if (dateA[2] > dateB[2]) return -1;
-			else if (dateA[2] > dateB[2]) return 1;
-			else return 0;
-		})
-		.map(item => {
-			const customer = props.customers.filter(
-				customer => customer._id === item.customer
-			)[0];
+		? props.data
+				.filter(item => item.datePaid)
+				.sort((a, b) => {
+					const dateA = moment(a.datePaid).format('YYYY-MM-DD').split('-');
+					const dateB = moment(b.datePaid).format('YYYY-MM-DD').split('-');
+					if (dateA[0] > dateB[0]) return -1;
+					else if (dateA[0] < dateB[0]) return 1;
+					else if (dateA[1] > dateB[1]) return -1;
+					else if (dateA[1] < dateB[1]) return 1;
+					else if (dateA[2] > dateB[2]) return -1;
+					else if (dateA[2] > dateB[2]) return 1;
+					else return 0;
+				})
+				.map(item => {
+					const customer = props.customers.filter(
+						customer => customer._id === item.customer
+					)[0];
 
-			item.customerName = customer.name;
-			item.customerAddress = customer.address;
-			item.phone = customer.phone;
-			item.datePaid = moment(item.datePaid).format('MM-DD-YY');
-			return item;
-		});
+					item.customerName = customer.name;
+					item.customerAddress = customer.address;
+					item.phone = customer.phone;
+					item.datePaid = moment(item.datePaid).format('MM-DD-YY');
+					return item;
+				})
+		: [];
 
 	const CustomTooltip = ({ active, payload, label }) => {
 		if (active && payload && payload[0]) {

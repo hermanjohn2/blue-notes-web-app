@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Grid, Card, Message, Icon } from 'semantic-ui-react';
+import { Grid, Card } from 'semantic-ui-react';
 import StatsBarChart from '../StatsBarChart';
 import StatsBox from '../StatsBox';
 import './style.css';
 
 const StatsCard = props => {
-	const [selectedJob, setSelectedJob] = useState(
-		props.user.jobs[0] ? props.user.jobs[0] : null
-	);
+	const selectedJob = props.selectedJob
+		? props.selectedJob
+		: props.user.jobs[0];
+
 	const header =
 		props.type === 'customer'
 			? `${props.data.name} | ${props.data.address} | ${props.data.phone}`
@@ -28,7 +28,7 @@ const StatsCard = props => {
 					<Grid.Column width={6}>
 						<StatsBox
 							selectedJob={selectedJob}
-							setSelectedJob={setSelectedJob}
+							setSelectedJob={props.setSelectedJob}
 							config={props.config}
 							modal={props.modal}
 							setModal={props.setModal}
@@ -36,13 +36,14 @@ const StatsCard = props => {
 							setFormObj={props.setFormObj}
 							customerName={props.customerName}
 							customers={props.user.customers}
+							jobs={data}
 						/>
 					</Grid.Column>
 					<Grid.Column width={6}>
 						<StatsBarChart
 							data={data}
 							customers={props.user.customers}
-							setSelectedJob={setSelectedJob}
+							setSelectedJob={props.setSelectedJob}
 							customerName={props.customerName}
 						/>
 					</Grid.Column>

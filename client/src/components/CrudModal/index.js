@@ -182,6 +182,8 @@ const CrudModal = props => {
 								formObj={props.formObj}
 								setFormObj={props.setFormObj}
 								customerName={props.customerName}
+								selectedJob={props.selectedJob}
+								setSelectedJob={props.setSelectedJob}
 							/>
 						) : null}
 						{messageData.show ? <CustomMessage data={messageData} /> : null}

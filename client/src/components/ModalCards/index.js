@@ -119,7 +119,7 @@ const ModalCards = props => {
 							{props.action === 'customer-report' ? (
 								<StatsTable
 									data={{
-										headers: ['Total Jobs', 'Paid', 'No Payment'],
+										headers: ['Jobs', 'Complete', 'Incomplete'],
 										values: [
 											[
 												arrayStats('total', props.jobs, item._id),

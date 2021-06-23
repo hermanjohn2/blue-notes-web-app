@@ -6,7 +6,7 @@ import './style.css';
 
 import CustomMenu from '../../components/CustomMenu';
 import CrudModal from '../../components/CrudModal';
-import StatsBox from '../../components/StatsCard';
+import StatsCard from '../../components/StatsCard';
 
 const Dashboard = props => {
 	const { user, logout } = useAuth0();
@@ -16,9 +16,9 @@ const Dashboard = props => {
 		show: false,
 		data: {}
 	});
+	const [formObj, setFormObj] = useState();
 
 	const handleUser = () => {
-		// console.log(currentUser);
 		if (!currentUser) {
 			API.getUser(user.sub)
 				.then(res => setCurrentUser(res.data))
@@ -57,6 +57,9 @@ const Dashboard = props => {
 						setUser={setCurrentUser}
 						modal={modal}
 						setModal={setModal}
+						formObj={formObj}
+						setFormObj={setFormObj}
+						config={config}
 					/>
 					<Grid className="desktop-container" stackable columns={2}>
 						<Grid.Row>
@@ -70,7 +73,15 @@ const Dashboard = props => {
 								<CustomMenu config={config} modal={modal} setModal={setModal} />
 							</Grid.Column>
 							<Grid.Column width={8}>
-								<StatsBox type="all" user={currentUser} />
+								<StatsCard
+									type="all"
+									user={currentUser}
+									modal={modal}
+									setModal={setModal}
+									formObj={formObj}
+									setFormObj={setFormObj}
+									config={config}
+								/>
 							</Grid.Column>
 						</Grid.Row>
 					</Grid>

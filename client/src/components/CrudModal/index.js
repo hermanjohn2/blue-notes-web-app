@@ -9,8 +9,9 @@ import CustomMessage from '../CustomMessage';
 import StatsCard from '../StatsCard';
 
 const CrudModal = props => {
-	console.log(props.user);
-	const [formObj, setFormObj] = useState();
+	// console.log(props.user);
+	const formObj = props.formObj;
+	const setFormObj = props.setFormObj;
 	const [messageData, setMessageData] = useState({
 		show: false,
 		type: '',
@@ -175,6 +176,11 @@ const CrudModal = props => {
 								type={props.modal.reportType}
 								data={modal.reportData}
 								user={props.user}
+								modal={modal}
+								setModal={props.setModal}
+								formObj={props.formObj}
+								setFormObj={props.setFormObj}
+								config={props.config}
 							/>
 						) : null}
 						{messageData.show ? <CustomMessage data={messageData} /> : null}

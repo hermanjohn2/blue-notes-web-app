@@ -1,8 +1,15 @@
-import { List, Icon } from 'semantic-ui-react';
+import { List, Icon, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import './style.css';
 
 const StatsBox = props => {
+	const editJobConfig = props.config.menuOptions.filter(
+		option => option.type === 'edit'
+	)[0];
+	const editJobSubOpt = editJobConfig.subOptions.filter(
+		option => option.type === 'edit-job'
+	)[0];
+
 	const lastJob = props.data[0];
 
 	// const paidValsArr = props.data
@@ -24,31 +31,84 @@ const StatsBox = props => {
 		{ key: 'notes', text: 'Notes' }
 	];
 
+	const handleClick = type => {
+		const modal = { ...props.modal };
+		const formObj = { ...props.formObj };
+
+		switch (type) {
+			case 'job':
+				if (lastJob && editJobSubOpt.formData[0]) {
+					formObj._id = lastJob._id;
+					formObj.title = lastJob.title;
+					formObj.invoiceTotal = lastJob.invoiceTotal;
+					formObj.customer = lastJob.customer;
+					formObj.complete = lastJob.complete;
+					formObj.notes = lastJob.notes;
+					formObj.datePaid = lastJob.datePaid;
+
+					props.setFormObj(formObj);
+
+					modal.type = 'form';
+					modal.title = editJobSubOpt.title;
+					modal.show = true;
+					modal.method = editJobConfig.type;
+					modal.formData = editJobSubOpt.formData;
+
+					props.setModal(modal);
+				}
+				break;
+			case 'customer':
+				console.log(lastJob);
+				break;
+
+			default:
+				break;
+		}
+	};
+
 	return (
-		<List className="stats-box-list" divided relaxed>
-			{listData.map(row =>
-				lastJob[row.key] ? (
-					<List.Item>
-						<List.Content>
-							<List.Header as="h3">{row.text}</List.Header>
+		<>
+			<List className="stats-box-list" divided relaxed>
+				{listData.map(row =>
+					row.key === 'complete' || lastJob[row.key] ? (
+						<List.Item>
 							<List.Content>
-								{row.key === 'title' ||
-								row.key === 'invoiceTotal' ||
-								row.key === 'notes' ? (
-									lastJob[row.key]
-								) : row.key === 'complete' && lastJob.complete ? (
-									<Icon size="large" name="thumbs up" />
-								) : row.key === 'complete' && !lastJob.complete ? (
-									<Icon size="large" name="thumbs down" />
-								) : row.key === 'datePaid' ? (
-									moment(lastJob.datePaid).format('MM-DD-YYYY')
-								) : null}
+								<List.Header as="h3">{row.text}</List.Header>
+								<List.Content>
+									{row.key === 'title' ||
+									row.key === 'invoiceTotal' ||
+									row.key === 'notes' ? (
+										lastJob[row.key]
+									) : row.key === 'complete' && lastJob.complete ? (
+										<Icon size="large" name="thumbs up" />
+									) : row.key === 'complete' && !lastJob.complete ? (
+										<Icon size="large" name="thumbs down" />
+									) : row.key === 'datePaid' ? (
+										moment(lastJob.datePaid).format('MM-DD-YYYY')
+									) : null}
+								</List.Content>
 							</List.Content>
-						</List.Content>
-					</List.Item>
-				) : null
-			)}
-		</List>
+						</List.Item>
+					) : null
+				)}
+			</List>
+			<br />
+			<div className="ui two buttons">
+				<Button
+					onClick={() => handleClick('job')}
+					className="stats-box-btn"
+					fluid>
+					View Job
+				</Button>
+				<Button
+					onClick={() => handleClick('customer')}
+					color="blue"
+					className="stats-box-btn"
+					fluid>
+					View Customer
+				</Button>
+			</div>
+		</>
 	);
 };
 

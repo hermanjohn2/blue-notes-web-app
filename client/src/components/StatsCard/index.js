@@ -15,7 +15,6 @@ const StatsCard = props => {
 			? props.user.jobs.filter(job => job.customer === props.data._id)
 			: props.user.jobs;
 
-	// console.log(data);
 	return data[0] ? (
 		<Card className="stats-card" fluid>
 			<Card.Header className="stats-header">
@@ -24,10 +23,17 @@ const StatsCard = props => {
 			<Grid divided="vertically">
 				<Grid.Row columns={2}>
 					<Grid.Column width={6}>
-						<StatsBox data={data} />
+						<StatsBox
+							modal={props.modal}
+							setModal={props.setModal}
+							formObj={props.setFormObj}
+							setFormObj={props.setFormObj}
+							data={data}
+							config={props.config}
+						/>
 					</Grid.Column>
 					<Grid.Column width={6}>
-						<StatsBarChart data={data} />
+						<StatsBarChart data={data} customers={props.user.customers} />
 					</Grid.Column>
 				</Grid.Row>
 			</Grid>

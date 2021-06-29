@@ -170,6 +170,8 @@ const CrudModal = props => {
 								setModal={props.setModal}
 								formObj={formObj}
 								setFormObj={setFormObj}
+								setConfirmOpen={props.setConfirmOpen}
+								setConfirmData={props.setConfirmData}
 							/>
 						) : modal.type === 'report' ? (
 							<StatsCard

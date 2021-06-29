@@ -75,6 +75,21 @@ const API = {
 
 		user.jobs = await updateObjInArr(user.jobs, jobUpdate, formObj);
 		return user;
+	},
+	deleteUserJob: async (user, jobData) => {
+		await axios.delete(`${url}/api/jobs/${jobData._id}`).catch(err => {
+			console.log(err);
+		});
+
+		user.jobs = user.jobs.filter(job => job._id !== jobData._id);
+		user.customers = user.customers.map(customer => {
+			if (customer._id === jobData.customer) {
+				customer.jobs = customer.jobs.filter(job => job !== jobData._id);
+			}
+			return customer;
+		});
+		// console.log(updatedJobs);
+		return user;
 	}
 };
 

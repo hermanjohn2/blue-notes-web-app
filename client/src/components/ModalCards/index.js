@@ -71,7 +71,8 @@ const ModalCards = props => {
 				props.setFormObj(formObj);
 			} else return;
 		} else {
-			console.log('DELETE');
+			props.setConfirmData(data);
+			props.setConfirmOpen(true);
 		}
 	};
 

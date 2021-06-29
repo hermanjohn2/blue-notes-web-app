@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Confirm } from 'semantic-ui-react';
 import API from '../../utils/API';
 import './style.css';
 
@@ -18,6 +18,8 @@ const Dashboard = props => {
 	});
 	const [formObj, setFormObj] = useState();
 	const [selectedJob, setSelectedJob] = useState();
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [confirmData, setConfirmData] = useState();
 
 	const handleUser = () => {
 		if (!currentUser) {
@@ -49,6 +51,16 @@ const Dashboard = props => {
 	const customerName = (id, customerArr) =>
 		customerArr.filter(customer => customer._id === id)[0].name;
 
+	const confirmHandler = async data => {
+		if (Object.keys(data).includes('title')) {
+			const updatedUser = await API.deleteUserJob(currentUser, data);
+			setCurrentUser(updatedUser);
+			setConfirmOpen(false);
+		} else {
+			console.log('delete customer', data._id);
+		}
+	};
+
 	useEffect(() => {
 		handleUser();
 		getConfig();
@@ -69,7 +81,23 @@ const Dashboard = props => {
 						customerName={customerName}
 						selectedJob={selectedJob}
 						setSelectedJob={setSelectedJob}
+						setConfirmOpen={setConfirmOpen}
+						setConfirmData={setConfirmData}
 					/>
+					{confirmData ? (
+						<Confirm
+							open={confirmOpen}
+							content={
+								Object.keys(confirmData).includes('title')
+									? 'Are you sure you want to delete this job? You will lose all data associated with this job.'
+									: 'Are you sure you want to delete this customer?'
+							}
+							onCancel={() => setConfirmOpen(false)}
+							onClose={() => setConfirmOpen(false)}
+							onConfirm={() => confirmHandler(confirmData)}
+						/>
+					) : null}
+
 					<Grid className="desktop-container" stackable columns={2}>
 						<Grid.Row>
 							<button

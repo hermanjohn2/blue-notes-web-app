@@ -7,6 +7,7 @@ import ModalForm from '../ModalForm';
 import ModalCards from '../ModalCards';
 import CustomMessage from '../CustomMessage';
 import StatsCard from '../StatsCard';
+import SalesReport from '../SalesReport';
 
 const CrudModal = props => {
 	const formObj = props.formObj;
@@ -173,7 +174,7 @@ const CrudModal = props => {
 								setConfirmOpen={props.setConfirmOpen}
 								setConfirmData={props.setConfirmData}
 							/>
-						) : modal.type === 'report' ? (
+						) : modal.type === 'customer-report' ? (
 							<StatsCard
 								config={props.config}
 								type={props.modal.reportType}
@@ -187,6 +188,8 @@ const CrudModal = props => {
 								selectedJob={props.selectedJob}
 								setSelectedJob={props.setSelectedJob}
 							/>
+						) : modal.type === 'sales-report' ? (
+							<SalesReport data={props.user} />
 						) : null}
 						{messageData.show ? <CustomMessage data={messageData} /> : null}
 					</Modal.Content>

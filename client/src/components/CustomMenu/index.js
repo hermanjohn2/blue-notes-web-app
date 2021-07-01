@@ -16,7 +16,15 @@ const CustomMenu = props => {
 										show: true,
 										title: subItem.title,
 										method: item.type,
-										type: item.type === 'create' ? 'form' : 'cards',
+										type:
+											item.type === 'create'
+												? 'form'
+												: item.type === 'edit' ||
+												  subItem.type === 'read-customer-report'
+												? 'cards'
+												: subItem.type === 'read-sales-report'
+												? 'sales-report'
+												: null,
 										formData: subItem.formData
 									})
 								}>

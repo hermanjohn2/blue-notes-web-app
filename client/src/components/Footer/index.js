@@ -2,7 +2,6 @@ import { Button, Card, List } from 'semantic-ui-react';
 import StatsTable from '../StatsTable';
 
 const ModalCards = props => {
-	console.log(props.action);
 	const cardsArr =
 		props.action === 'edit-customer' || props.action === 'customer-report'
 			? props.customers
@@ -56,7 +55,7 @@ const ModalCards = props => {
 					break;
 
 				case 'customer-report':
-					modal.type = 'customer-report';
+					modal.type = 'read-customer-report';
 					modal.reportData = data;
 					modal.reportType = 'customer';
 					props.setModal(modal);

@@ -77,9 +77,7 @@ const API = {
 		return user;
 	},
 	deleteUserJob: async (user, jobData) => {
-		await axios.delete(`${url}/api/jobs/${jobData._id}`).catch(err => {
-			console.log(err);
-		});
+		await axios.delete(`${url}/api/jobs/${jobData._id}`);
 
 		user.jobs = user.jobs.filter(job => job._id !== jobData._id);
 		user.customers = user.customers.map(customer => {
@@ -88,7 +86,23 @@ const API = {
 			}
 			return customer;
 		});
-		// console.log(updatedJobs);
+		return user;
+	},
+	deleteUserCustomerData: async (user, customerData) => {
+		const customerJobIds = user.jobs
+			.filter(job => job.customer === customerData._id)
+			.map(job => job._id);
+
+		for await (const id of customerJobIds) {
+			await axios.delete(`${url}/api/jobs/${id}`);
+		}
+
+		await axios.delete(`${url}/api/customers/${customerData._id}`);
+
+		user.customers = user.customers.filter(
+			customer => customer._id !== customerData._id
+		);
+		user.jobs = user.jobs.filter(job => job.customer !== customerData._id);
 		return user;
 	}
 };

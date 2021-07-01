@@ -52,12 +52,17 @@ const Dashboard = props => {
 		customerArr.filter(customer => customer._id === id)[0].name;
 
 	const confirmHandler = async data => {
-		if (Object.keys(data).includes('title')) {
-			const updatedUser = await API.deleteUserJob(currentUser, data);
+		let updatedUser;
+		try {
+			if (Object.keys(data).includes('title')) {
+				updatedUser = await API.deleteUserJob(currentUser, data);
+			} else {
+				updatedUser = await API.deleteUserCustomerData(currentUser, data);
+			}
 			setCurrentUser(updatedUser);
 			setConfirmOpen(false);
-		} else {
-			console.log('delete customer', data._id);
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
@@ -90,7 +95,7 @@ const Dashboard = props => {
 							content={
 								Object.keys(confirmData).includes('title')
 									? 'Are you sure you want to delete this job? You will lose all data associated with this job.'
-									: 'Are you sure you want to delete this customer?'
+									: 'Are you sure you want to delete this customer? You will lose all data associated with this customer, including all jobs assigned to this customer.'
 							}
 							onCancel={() => setConfirmOpen(false)}
 							onClose={() => setConfirmOpen(false)}

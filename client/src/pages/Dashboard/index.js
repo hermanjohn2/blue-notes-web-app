@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Grid, Confirm } from 'semantic-ui-react';
+import { Grid, Confirm, Icon } from 'semantic-ui-react';
 import API from '../../utils/API';
 import './style.css';
 
@@ -66,6 +66,28 @@ const Dashboard = props => {
 		}
 	};
 
+	const ConfirmContent = ({ isJob }) => {
+		return (
+			<div className="confirm-content">
+				<Icon size="massive" name="exclamation circle" />
+				{isJob ? (
+					<>
+						<h1>Are you sure you want to delete this job?</h1>
+						<h2>You will lose all data associated with this job.</h2>
+					</>
+				) : (
+					<>
+						<h1>Are you sure you want to delete this customer?</h1>
+						<h2>
+							You will lose all data associated with this customer, including
+							all jobs assigned to this customer.
+						</h2>
+					</>
+				)}
+			</div>
+		);
+	};
+
 	useEffect(() => {
 		handleUser();
 		getConfig();
@@ -93,9 +115,9 @@ const Dashboard = props => {
 						<Confirm
 							open={confirmOpen}
 							content={
-								Object.keys(confirmData).includes('title')
-									? 'Are you sure you want to delete this job? You will lose all data associated with this job.'
-									: 'Are you sure you want to delete this customer? You will lose all data associated with this customer, including all jobs assigned to this customer.'
+								<ConfirmContent
+									isJob={Object.keys(confirmData).includes('title')}
+								/>
 							}
 							onCancel={() => setConfirmOpen(false)}
 							onClose={() => setConfirmOpen(false)}

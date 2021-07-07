@@ -72,7 +72,7 @@ const StatsBox = props => {
 
 			case 'customer':
 				modal.show = true;
-				modal.type = 'report';
+				modal.type = 'customer-report';
 				modal.title = viewCustomerSubOpt.title;
 				modal.reportData = currentCustomer;
 				modal.reportType = 'customer';

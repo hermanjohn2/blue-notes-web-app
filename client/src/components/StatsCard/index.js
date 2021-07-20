@@ -4,7 +4,6 @@ import StatsBox from '../StatsBox';
 import './style.css';
 
 const StatsCard = props => {
-	console.log(props);
 	const selectedJob = props.selectedJob
 		? props.selectedJob
 		: props.user.jobs[0];

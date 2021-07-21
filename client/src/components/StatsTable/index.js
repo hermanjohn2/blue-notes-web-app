@@ -13,8 +13,8 @@ const StatsTable = props => {
 			<Table.Body>
 				{props.data.values.map((row, i) => (
 					<Table.Row key={`table-row-${i}`}>
-						{row.map(value => (
-							<Table.Cell key={`cell-value-${value}`}>{value}</Table.Cell>
+						{row.map((value, i) => (
+							<Table.Cell key={`cell-value-${i}`}>{value}</Table.Cell>
 						))}
 					</Table.Row>
 				))}

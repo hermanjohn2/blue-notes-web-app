@@ -6,7 +6,7 @@ import API from '../../utils/API';
 import ModalForm from '../ModalForm';
 import ModalCards from '../ModalCards';
 import CustomMessage from '../CustomMessage';
-import StatsCard from '../StatsCard';
+import StatsContainer from '../StatsContainer';
 import SalesReport from '../SalesReport';
 
 const CrudModal = props => {
@@ -48,6 +48,7 @@ const CrudModal = props => {
 			setMessageData(messageObj);
 
 			const newModal = { ...modal };
+			newModal.reportData = {};
 			newModal.show = false;
 			props.setModal(newModal);
 
@@ -139,7 +140,7 @@ const CrudModal = props => {
 
 	return (
 		<>
-			{modal ? (
+			{modal && modal.show ? (
 				<Modal closeIcon open={modal.show} onClose={() => modalHandler.close()}>
 					<Header
 						icon={
@@ -175,7 +176,7 @@ const CrudModal = props => {
 								setConfirmData={props.setConfirmData}
 							/>
 						) : modal.type === 'customer-report' ? (
-							<StatsCard
+							<StatsContainer
 								config={props.config}
 								type={props.modal.reportType}
 								data={modal.reportData}

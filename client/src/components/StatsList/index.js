@@ -2,7 +2,7 @@ import { List, Icon, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import './style.css';
 
-const StatsBox = props => {
+const StatsList = props => {
 	const editJobConfig = props.config.menuOptions.filter(
 		option => option.type === 'edit'
 	)[0];
@@ -18,24 +18,13 @@ const StatsBox = props => {
 		option => option.type === 'read-customer-report'
 	)[0];
 
-	const selectedJob = props.selectedJob;
+	const selectedJob = props.selectedJob ? props.selectedJob : props.jobs[0];
 
 	const currentCustomer = props.customers
 		? props.customers.filter(
 				customer => customer._id === selectedJob.customer
 		  )[0]
 		: null;
-
-	// const paidValsArr = props.data
-	// 	.filter(job => job.complete)
-	// 	.map(job => job.invoiceTotal);
-
-	// const unpaidValsArr = props.data
-	// 	.filter(job => !job.complete)
-	// 	.map(job => job.invoiceTotal);
-
-	// const totalReducer = (accumulator, currentValue) =>
-	// 	accumulator + currentValue;
 
 	const listData = [
 		{ key: 'title', text: 'Last Job' },
@@ -76,7 +65,6 @@ const StatsBox = props => {
 				modal.title = viewCustomerSubOpt.title;
 				modal.reportData = currentCustomer;
 				modal.reportType = 'customer';
-
 				const currentJob = props.jobs.filter(
 					job => job.customer === currentCustomer._id
 				)[0];
@@ -153,4 +141,4 @@ const StatsBox = props => {
 	);
 };
 
-export default StatsBox;
+export default StatsList;

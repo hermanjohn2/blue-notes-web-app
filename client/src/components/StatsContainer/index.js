@@ -1,11 +1,22 @@
+import moment from 'moment';
 import { Grid, Card } from 'semantic-ui-react';
 import StatsBarChart from '../StatsBarChart';
-import StatsBox from '../StatsBox';
+import StatsList from '../StatsList';
 import './style.css';
 
-const StatsCard = props => {
+const StatsContainer = props => {
 	const selectedJob = props.selectedJob
 		? props.selectedJob
+		: props.modal.type === 'customer-report'
+		? props.user.jobs
+				.filter(job => job.customer === props.modal.reportData._id)
+				.sort((a, b) =>
+					moment(a.datePaid) < moment(b.datePaid)
+						? 1
+						: moment(a.datePaid) === moment(b.datePaid)
+						? 0
+						: -1
+				)[0]
 		: props.user.jobs[0];
 
 	const header =
@@ -26,7 +37,7 @@ const StatsCard = props => {
 			<Grid divided="vertically">
 				<Grid.Row columns={2}>
 					<Grid.Column width={6}>
-						<StatsBox
+						<StatsList
 							selectedJob={selectedJob}
 							setSelectedJob={props.setSelectedJob}
 							config={props.config}
@@ -53,4 +64,4 @@ const StatsCard = props => {
 	) : null;
 };
 
-export default StatsCard;
+export default StatsContainer;
